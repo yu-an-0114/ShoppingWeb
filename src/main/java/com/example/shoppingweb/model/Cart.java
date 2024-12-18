@@ -10,20 +10,20 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private Integer cartId;  // 新增 cart_id 作為主鍵
+    private Integer cartId;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;  // 外鍵，指向 Product 表
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Member user;  // 外鍵，指向 Member 表
+    private Member user;
 
     @Column(nullable = false)
-    private Integer quantity;  // 商品數量
+    private Integer quantity;
 
-    // Getters 和 Setters
+
     public Integer getCartId() {
         return cartId;
     }

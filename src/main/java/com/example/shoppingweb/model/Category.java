@@ -19,7 +19,7 @@ public class Category {
     private Double categoryDiscount;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Product> products; // 確保這裡是集合類型
+    private Set<Product> products;
 
     // Getters and Setters
     public Integer getCategoryId() { return categoryId; }

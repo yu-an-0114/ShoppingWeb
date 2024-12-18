@@ -9,29 +9,28 @@ public class Coupon {
 
     @Id
     @Column(nullable = false)
-    private String id; // 優惠券ID
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member; // 發放優惠券的會員
+    private Member member;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDateTime startDate; // 開始日期
+    private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    private LocalDateTime endDate; // 結束日期
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
-    private Double discount; // 折扣數
+    private Double discount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category; // 適用商品分類（可選）
+    private Category category;
 
     @Column(name = "low_limit")
-    private Integer lowLimit; // 金額下限（可選）
+    private Integer lowLimit;
 
-    // Getters 和 Setters
     public String getId() {
         return id;
     }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "`ORDER`") // 注意避免使用保留字
+@Table(name = "`ORDER`")
 public class Order {
 
     @Id

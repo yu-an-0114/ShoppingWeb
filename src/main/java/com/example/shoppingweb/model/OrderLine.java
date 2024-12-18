@@ -6,18 +6,18 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "ORDER_LINE")
-@IdClass(OrderLine.OrderLineId.class) // 使用内部静态类作为复合主键
+@IdClass(OrderLine.OrderLineId.class)
 public class OrderLine {
 
     @Id
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order; // 订单
+    private Order order;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product; // 商品
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantity; // 商品数量
@@ -58,22 +58,22 @@ public class OrderLine {
         this.note = note;
     }
 
-    // 内部静态类，用于定义复合主键
+
     public static class OrderLineId implements Serializable {
 
-        private Integer order; // 对应 Order 的主键
-        private Integer product; // 对应 Product 的主键
+        private Integer order;
+        private Integer product;
 
-        // 默认构造函数
+
         public OrderLineId() {}
 
-        // 参数化构造函数
+
         public OrderLineId(Integer order, Integer product) {
             this.order = order;
             this.product = product;
         }
 
-        // Getters 和 Setters
+
         public Integer getOrder() {
             return order;
         }
@@ -90,7 +90,7 @@ public class OrderLine {
             this.product = product;
         }
 
-        // 重写 equals 和 hashCode
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
