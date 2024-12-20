@@ -3,8 +3,9 @@ package com.example.shoppingweb.model;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+
 @Entity
-@Table(name = "CART")
+@Table(name = "cart")
 public class Cart {
 
     @Id
@@ -23,7 +24,7 @@ public class Cart {
     @Column(nullable = false)
     private Integer quantity;
 
-
+    // Getters and Setters
     public Integer getCartId() {
         return cartId;
     }

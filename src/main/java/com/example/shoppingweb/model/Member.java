@@ -4,18 +4,19 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MEMBER")
+@Table(name = "member")
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private String id;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(name = "member_status", nullable = false)
-    private Integer memberStatus = 1; //(0: 停用, 1: 正常)
+    private Integer memberStatus = 1; // (0: 停用, 1: 正常)
 
     @Column(nullable = false, unique = true)
     private String phone;
@@ -35,11 +36,12 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    public String getId() {
+    // Getters and Setters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

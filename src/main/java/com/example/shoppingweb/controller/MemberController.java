@@ -21,7 +21,7 @@ public class MemberController {
     public ResponseEntity<String> registerMember(@RequestBody Member member) {
         try {
             memberService.registerMember(member);
-            return ResponseEntity.ok("Member registered successfully! ID: " + member.getId());
+            return ResponseEntity.ok(member.getName() + "registered successfully!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -30,9 +30,9 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Map<String, String> loginData) {
         try {
-            String id = loginData.get("id");
+            String email = loginData.get("email");
             String password = loginData.get("password");
-            Member member = memberService.login(id, password);
+            Member member = memberService.login(email, password);
             if (member == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid account or password.");
             }
@@ -58,7 +58,7 @@ public class MemberController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getMember(@RequestParam String id) {
+    public ResponseEntity<?> getMember(@RequestParam Integer id) {
         try {
             Member member = memberService.findById(id);
             return ResponseEntity.ok(member);

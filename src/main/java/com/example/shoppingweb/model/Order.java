@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "`ORDER`")
+@Table(name = "orders") // Changed the table name to `orders`
 public class Order {
 
     @Id
@@ -34,7 +34,7 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private Integer orderStatus; //(0: 完成, 1: 處理中)
 
-    // Getters 和 Setters
+    // Getters and Setters
     public Integer getId() {
         return id;
     }

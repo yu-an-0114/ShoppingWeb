@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "COUPON")
+@Table(name = "coupon")
 public class Coupon {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private String id;
+    private Integer id; // Changed from String to Integer
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -31,11 +32,11 @@ public class Coupon {
     @Column(name = "low_limit")
     private Integer lowLimit;
 
-    public String getId() {
+    public Integer getId() {  // Changed from String to Integer
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {  // Changed from String to Integer
         this.id = id;
     }
 

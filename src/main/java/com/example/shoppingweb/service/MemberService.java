@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-
 @Service
 public class MemberService {
 
@@ -20,8 +18,9 @@ public class MemberService {
         member.setRegisterDate(now);
         memberRepository.save(member);
     }
-    public Member login(String id, String password) {
-        return memberRepository.findByIdAndPassword(id, password).orElse(null); // 如果找不到，返回 null
+
+    public Member login(String email, String password) {
+        return memberRepository.findByEmailAndPassword(email, password).orElse(null); // If not found, return null
     }
 
     public void update(Member updateMember) {
@@ -45,7 +44,7 @@ public class MemberService {
         }
     }
 
-    public Member findById(String id) {
+    public Member findById(Integer id) {
         return memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Member not found with id: " + id));
     }
 }
