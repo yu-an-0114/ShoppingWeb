@@ -9,7 +9,7 @@ public class Ratings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ratingId;
+    private Integer ratingId;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -18,6 +18,10 @@ public class Ratings {
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @Column(name = "rating_score", nullable = false)
     private Integer ratingScore;
@@ -29,11 +33,11 @@ public class Ratings {
     private LocalDateTime ratingDate;
 
     // Getters 和 Setters
-    public Long getRatingId() {
+    public Integer getRatingId() {
         return ratingId;
     }
 
-    public void setRatingId(Long ratingId) {
+    public void setRatingId(Integer ratingId) {
         this.ratingId = ratingId;
     }
 
@@ -52,6 +56,9 @@ public class Ratings {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    public Order getOrder() {return order;}
+    public void setOrder(Order order) {this.order = order;}
 
     public Integer getRatingScore() {
         return ratingScore;

@@ -1,8 +1,10 @@
 package com.example.shoppingweb.model;
 
+import com.example.shoppingweb.repository.CategoryRepository;
 import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -13,43 +15,43 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;  // 商品id
+    private Integer id;
 
     @Column(nullable = false)
-    private String productName;  // 商品名稱
+    private String productName;
 
     @Column(nullable = false)
-    private Integer price;  // 商品價錢
+    private Integer price;
 
     @Column(nullable = false)
-    private boolean soldOut;  // 庫存狀態 (0沒貨, 1有貨)
+    private boolean soldOut = true;
 
-    private String description;  // 商品描述
-
-    @Column(nullable = false)
-    private Integer stock;  // 庫存數量
-
-    private Integer reservedStock;  // 商品被預購數量
+    private String description;
 
     @Column(nullable = false)
-    private Integer sales;  // 賣出數量
+    private Integer stock;
+
+    private Integer reservedStock = 0;
 
     @Column(nullable = false)
-    private LocalDateTime publishDate;  // 創造日期
-
-    private LocalDateTime modifiedDate;  // 商品修改日期
+    private Integer sales = 0;
 
     @Column(nullable = false)
-    private String image;  // 圖片
+    private LocalDateTime publishDate;
+
+    private LocalDateTime modifiedDate;
+
+    @Column(nullable = false)
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;  // 商品分類
+    private Category category;
 
     @Column(nullable = false)
-    private Boolean enabled;  // 商品狀態 (0下架, 1上架)
+    private Boolean enabled = true;
 
-    // Getters and Setters
+
     public Integer getId() {
         return id;
     }
@@ -137,11 +139,9 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
-
     public Category getCategory() {
         return category;
     }
-
     public void setCategory(Category category) {
         this.category = category;
     }

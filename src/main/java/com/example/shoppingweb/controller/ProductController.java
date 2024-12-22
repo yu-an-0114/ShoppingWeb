@@ -1,5 +1,6 @@
 package com.example.shoppingweb.controller;
 
+import com.example.shoppingweb.DTO.ProductDTO;
 import com.example.shoppingweb.model.Product;
 import com.example.shoppingweb.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    /**
-     * 新增商品
-     * POST /products
-     */
     @PostMapping
     public ResponseEntity<Object> addProduct(@RequestBody Product product) {
         try {
@@ -34,29 +31,28 @@ public class ProductController {
         }
     }
 
-    /**
-     * 修改商品
-     * PUT /products/{id}
-     */
+
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateProduct(@PathVariable("id") Integer id,
-                                                @RequestBody Product product) {
+    public ResponseEntity<Object> updateProduct(@PathVariable("id") Integer id, @RequestBody Product product) {
+        if (id == null || !id.equals(product.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Product ID in path and body must match and must not be null.");
+        }
+
         try {
             Product updatedProduct = productService.updateProduct(id, product);
             return ResponseEntity.ok(updatedProduct);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while updating the product: " + e.getMessage());
         }
     }
 
-    /**
-     * 刪除商品
-     * DELETE /products/{id}
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable("id") Integer id) {
         try {
@@ -71,36 +67,28 @@ public class ProductController {
         }
     }
 
-    /**
-     * 搜尋商品 by ID
-     * GET /products/{id}
-     */
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getProductById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Object> getProductById(@PathVariable Integer id) {
         try {
             Product product = productService.getProductById(id);
             return ResponseEntity.ok(product);
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Product not found with ID: " + id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while retrieving the product: " + e.getMessage());
         }
     }
-
-    /**
-     * 搜尋商品 by productName (optional feature)
-     * GET /products/search?name=xxx
-     */
     @GetMapping("/search")
     public ResponseEntity<Object> getProductByName(@RequestParam("name") String productName) {
         try {
-            List<Product> products = productService.getProductByName(productName);
-            if (products.isEmpty()) {
+            List<ProductDTO> productDTOs = productService.getProductDTOByName(productName);
+            if (productDTOs.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No products found with name containing: " + productName);
             }
-            return ResponseEntity.ok(products);
+            return ResponseEntity.ok(productDTOs);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while searching for products: " + e.getMessage());

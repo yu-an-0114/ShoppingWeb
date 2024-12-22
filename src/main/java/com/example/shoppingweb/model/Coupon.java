@@ -13,7 +13,7 @@ public class Coupon {
     private Integer id; // Changed from String to Integer
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = true)
     private Member member;
 
     @Column(name = "start_date", nullable = false)

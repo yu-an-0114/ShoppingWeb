@@ -15,13 +15,9 @@ public class Category {
     @Column(name = "category_name", nullable = false, unique = true)
     private String categoryName;
 
-    @Column(name = "category_discount", nullable = false)
+    @Column(name = "category_discount", nullable = true)
     private Double categoryDiscount;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Product> products;
-
-    // Getters and Setters
     public Integer getCategoryId() { return categoryId; }
     public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
     public String getCategoryName() { return categoryName; }
@@ -29,6 +25,4 @@ public class Category {
     public Double getCategoryDiscount() { return categoryDiscount; }
     public void setCategoryDiscount(Double categoryDiscount) { this.categoryDiscount = categoryDiscount; }
 
-    public Set<Product> getProducts() { return products; }
-    public void setProducts(Set<Product> products) { this.products = products; }
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orders") // Changed the table name to `orders`
+@Table(name = "orders") // 對應資料庫中的 "orders" 表
 public class Order {
 
     @Id
@@ -22,6 +22,12 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
+    @Column(name = "shipping_date")
+    private LocalDateTime shippingDate;
+
+    @Column(name = "delivery_date")
+    private LocalDateTime deliveryDate;
+
     @Column(name = "address", nullable = false)
     private String address;
 
@@ -31,10 +37,15 @@ public class Order {
     @Column(name = "total_cost", nullable = false)
     private Integer totalCost;
 
-    @Column(name = "order_status", nullable = false)
-    private Integer orderStatus; //(0: 完成, 1: 處理中)
+    @Column(name = "payment_method", nullable = false)
+    private Integer paymentMethod;
 
-    // Getters and Setters
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "order_status", nullable = false)
+    private Integer orderStatus = 1; //(0: 完成, 1: 處理中)
+
     public Integer getId() {
         return id;
     }
@@ -67,6 +78,22 @@ public class Order {
         this.orderDate = orderDate;
     }
 
+    public LocalDateTime getShippingDate() {
+        return shippingDate;
+    }
+
+    public void setShippingDate(LocalDateTime shippingDate) {
+        this.shippingDate = shippingDate;
+    }
+
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -89,6 +116,22 @@ public class Order {
 
     public void setTotalCost(Integer totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Integer getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(Integer paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Integer getOrderStatus() {

@@ -8,22 +8,20 @@ public class OrderLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderLineId;  // 訂單商品id
+    private int orderLineId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;  // 訂單編號
+    @JoinColumn(nullable = false)
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;  // 商品編號
+    private Product product;
 
     @Column(nullable = false)
-    private int quantity;  // 商品數量
+    private int quantity;
 
-    private String note;  // 訂購的商品備註
-
-    // Getters and Setters
+    private String note;
     public int getOrderLineId() {
         return orderLineId;
     }

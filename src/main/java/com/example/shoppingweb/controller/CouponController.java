@@ -12,32 +12,38 @@ public class CouponController {
 
     @Autowired
     private CouponService couponService;
-
     @PostMapping
-    public ResponseEntity<Coupon> addCoupon(@RequestBody Coupon coupon) {
-        Coupon savedCoupon = couponService.addCoupon(coupon);
-        return ResponseEntity.ok(savedCoupon);
+    public ResponseEntity<?> addCoupon(@RequestBody Coupon coupon) {
+        try {
+            Coupon savedCoupon = couponService.addCoupon(coupon);
+            return ResponseEntity.ok(savedCoupon);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+        }
     }
-
-    // 修改優惠券
     @PutMapping("/{id}")
-    public ResponseEntity<Coupon> updateCoupon(@PathVariable Integer id, @RequestBody Coupon coupon) {
+    public ResponseEntity<?> updateCoupon(@PathVariable Integer id, @RequestBody Coupon coupon) {
         try {
             Coupon updatedCoupon = couponService.updateCoupon(id, coupon);
             return ResponseEntity.ok(updatedCoupon);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
         }
     }
-
-    // 刪除優惠券
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCoupon(@PathVariable Integer id) {
         try {
             couponService.deleteCoupon(id);
-            return ResponseEntity.ok("Coupon deleted successfully!");
+            return ResponseEntity.ok("Coupon deleted successfully.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
         }
     }
+
 }

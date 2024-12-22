@@ -12,4 +12,17 @@ public class OrderLineService {
 
     @Autowired
     private OrderLineRepository orderLineRepository;
+    public void saveAll(List<OrderLine> orderLines) {
+        orderLineRepository.saveAll(orderLines);
+    }
+    public List<OrderLine> findByOrderId(Integer orderId) {
+        return orderLineRepository.findByOrderId(orderId);
+    }
+    public void save(OrderLine orderLine) {
+        orderLineRepository.save(orderLine);
+    }
+
+    public void deleteAll(List<OrderLine> orderLines) {
+        orderLineRepository.deleteAll(orderLines);
+    }
 }
