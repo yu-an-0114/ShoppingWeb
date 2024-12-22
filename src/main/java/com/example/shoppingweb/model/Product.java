@@ -3,7 +3,9 @@ package com.example.shoppingweb.model;
 import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "product")
@@ -11,13 +13,13 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;  // 商品id
+    private Integer id;  // 商品id
 
     @Column(nullable = false)
     private String productName;  // 商品名稱
 
     @Column(nullable = false)
-    private int price;  // 商品價錢
+    private Integer price;  // 商品價錢
 
     @Column(nullable = false)
     private boolean soldOut;  // 庫存狀態 (0沒貨, 1有貨)
@@ -25,17 +27,17 @@ public class Product {
     private String description;  // 商品描述
 
     @Column(nullable = false)
-    private int stock;  // 庫存數量
+    private Integer stock;  // 庫存數量
 
-    private int reservedStock;  // 商品被預購數量
-
-    @Column(nullable = false)
-    private int sales;  // 賣出數量
+    private Integer reservedStock;  // 商品被預購數量
 
     @Column(nullable = false)
-    private Date publishDate;  // 創造日期
+    private Integer sales;  // 賣出數量
 
-    private Date modifiedDate;  // 商品修改日期
+    @Column(nullable = false)
+    private LocalDateTime publishDate;  // 創造日期
+
+    private LocalDateTime modifiedDate;  // 商品修改日期
 
     @Column(nullable = false)
     private String image;  // 圖片
@@ -45,14 +47,14 @@ public class Product {
     private Category category;  // 商品分類
 
     @Column(nullable = false)
-    private boolean enabled;  // 商品狀態 (0下架, 1上架)
+    private Boolean enabled;  // 商品狀態 (0下架, 1上架)
 
     // Getters and Setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -64,11 +66,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -88,43 +90,43 @@ public class Product {
         this.description = description;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public int getReservedStock() {
+    public Integer getReservedStock() {
         return reservedStock;
     }
 
-    public void setReservedStock(int reservedStock) {
+    public void setReservedStock(Integer reservedStock) {
         this.reservedStock = reservedStock;
     }
 
-    public int getSales() {
+    public Integer getSales() {
         return sales;
     }
 
-    public void setSales(int sales) {
+    public void setSales(Integer sales) {
         this.sales = sales;
     }
 
-    public Date getPublishDate() {
+    public LocalDateTime getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(LocalDateTime publishDate) {
         this.publishDate = publishDate;
     }
 
-    public Date getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
@@ -144,11 +146,11 @@ public class Product {
         this.category = category;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 }
