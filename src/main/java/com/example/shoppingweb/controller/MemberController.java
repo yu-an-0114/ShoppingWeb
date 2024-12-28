@@ -39,7 +39,7 @@ public class MemberController {
 
             Member member = memberService.login(email, password);
             if (member == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid account or password123.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid account or password.");
             }
             return ResponseEntity.ok(member);
 
