@@ -1,108 +1,369 @@
-CREATE DATABASE IF NOT EXISTS ShoppingWeb;
-GRANT ALL PRIVILEGES ON ShoppingWeb.* TO 'root'@'%';
-FLUSH PRIVILEGES;
-USE ShoppingWeb;
+-- MySQL dump 10.13  Distrib 8.0.40, for Linux (aarch64)
+--
+-- Host: localhost    Database: ShoppingWeb
+-- ------------------------------------------------------
+-- Server version	8.0.40
 
-CREATE TABLE member (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(255) NOT NULL,
-                        member_status INT NOT NULL ,
-                        phone VARCHAR(15) NOT NULL UNIQUE,
-                        email VARCHAR(255) NOT NULL UNIQUE,
-                        verified INT NOT NULL DEFAULT 0,
-                        permission INT NOT NULL DEFAULT 1,
-                        register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        password VARCHAR(255) NOT NULL
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE category (
-                          category_id INT AUTO_INCREMENT PRIMARY KEY ,
-                          category_name VARCHAR(255) UNIQUE NOT NULL,
-                          category_discount DOUBLE NOT NULL
-);
+--
+-- Table structure for table `cart`
+--
 
-CREATE TABLE coupon (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        member_id INT NOT NULL,
-                        start_date DATETIME NOT NULL,
-                        end_date DATETIME NOT NULL,
-                        discount DOUBLE NOT NULL,
-                        category_id INT,
-                        low_limit INT,
-                        FOREIGN KEY (member_id) REFERENCES member(id),
-                        FOREIGN KEY (category_id) REFERENCES category(category_id)
-);
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cart` (
+  `cart_id` int NOT NULL AUTO_INCREMENT,
+  `quantity` int NOT NULL,
+  `product_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`cart_id`),
+  KEY `product_id` (`product_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE product (
-                         id INT AUTO_INCREMENT PRIMARY KEY,
-                         product_name VARCHAR(255) NOT NULL,
-                         price INT NOT NULL,
-                         sold_out BOOLEAN NOT NULL,
-                         description VARCHAR(255),
-                         stock INT NOT NULL,
-                         reserved_stock INT,
-                         sales INT NOT NULL,
-                         publish_date DATETIME NOT NULL,
-                         modified_date DATETIME,
-                         image VARCHAR(255) NOT NULL,
-                         category_id INT NOT NULL,
-                         enabled BOOLEAN NOT NULL,
-                         FOREIGN KEY (category_id) REFERENCES category(category_id)
-);
+--
+-- Dumping data for table `cart`
+--
 
-CREATE TABLE orders (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        member_id INT NOT NULL,
-                        order_date DATETIME NOT NULL,
-                        shipping_date DATETIME,
-                        delivery_date DATETIME,
-                        address VARCHAR(255) NOT NULL,
-                        shipping_fee INT NOT NULL,
-                        coupon_id INT,
-                        total_cost INT NOT NULL,
-                        payment_method INT NOT NULL,
-                        note VARCHAR(255),
-                        order_status INT  NOT NULL,
-                        FOREIGN KEY (member_id) REFERENCES member(id),
-                        FOREIGN KEY (coupon_id) REFERENCES coupon(id)
-);
+LOCK TABLES `cart` WRITE;
+/*!40000 ALTER TABLE `cart` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cart` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE orderLine (
-                           orderLine_id INT AUTO_INCREMENT PRIMARY KEY,
-                           order_id INT NOT NULL,
-                           product_id INT NOT NULL,
-                           quantity INT NOT NULL,
-                           note VARCHAR(255),
-                           FOREIGN KEY (order_id) REFERENCES orders(id),
-                           FOREIGN KEY (product_id) REFERENCES product(id)
-);
+--
+-- Table structure for table `category`
+--
 
-CREATE TABLE rating (
-                        rating_id INT AUTO_INCREMENT PRIMARY KEY,
-                        order_id INT NOT NULL,
-                        product_id INT NOT NULL,
-                        member_id INT NOT NULL,
-                        rating_score INT NOT NULL,
-                        rating_comment VARCHAR(255),
-                        rating_date DATETIME NOT NULL,
-                        FOREIGN KEY (order_id) REFERENCES orders(id),
-                        FOREIGN KEY (product_id) REFERENCES product(id),
-                        FOREIGN KEY (member_id) REFERENCES member(id)
-);
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `category_id` int NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(255) NOT NULL,
+  `category_discount` double NOT NULL,
+  PRIMARY KEY (`category_id`),
+  UNIQUE KEY `category_name` (`category_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE cart (
-                      cart_id INT AUTO_INCREMENT PRIMARY KEY,
-                      quantity INT NOT NULL,
-                      product_id INT NOT NULL,
-                      user_id INT NOT NULL,
-                      FOREIGN KEY (product_id) REFERENCES product(id),
-                      FOREIGN KEY (user_id) REFERENCES member(id)
-);
+--
+-- Dumping data for table `category`
+--
 
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
 
-INSERT INTO member (name, member_status, phone, email, verified, permission, password)
-VALUES
-    ('Manager', 1, '1234567890', 'manager@manager.com', 1, 0, 'password');
+--
+-- Table structure for table `coupon`
+--
 
+DROP TABLE IF EXISTS `coupon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coupon` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `member_id` int NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `discount` double NOT NULL,
+  `category_id` int DEFAULT NULL,
+  `low_limit` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `coupon_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `coupon_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `coupon`
+--
 
+LOCK TABLES `coupon` WRITE;
+/*!40000 ALTER TABLE `coupon` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coupon` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member`
+--
+
+DROP TABLE IF EXISTS `member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `member` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `member_status` int NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `verified` int NOT NULL DEFAULT '0',
+  `permission` int NOT NULL DEFAULT '1',
+  `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone` (`phone`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member`
+--
+
+LOCK TABLES `member` WRITE;
+/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES (1,'Manager',1,'1234567890','manager@manager.com',1,0,'2024-12-28 12:00:39','password'),(12,'Alice',1,'12345678901','alice@example.com',1,2,'2024-12-28 12:09:24','password123'),(13,'Bob',1,'0987654321','bob@example.com',0,1,'2024-12-28 12:09:24','securepassword'),(14,'Charlie',2,'1122334455','charlie@example.com',1,3,'2024-12-28 12:09:24','mypassword'),(15,'Diana',1,'5566778899','diana@example.com',0,1,'2024-12-28 12:09:24','dianapass'),(16,'Eve',2,'9988776655','eve@example.com',1,2,'2024-12-28 12:09:24','evesecret');
+/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) NOT NULL,
+  `order_date` datetime(6) NOT NULL,
+  `order_status` int NOT NULL,
+  `shipping_fee` int NOT NULL,
+  `total_cost` int NOT NULL,
+  `coupon_id` varchar(255) DEFAULT NULL,
+  `member_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orderLine`
+--
+
+DROP TABLE IF EXISTS `orderLine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orderLine` (
+  `orderLine_id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`orderLine_id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `orderLine_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `orderLine_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orderLine`
+--
+
+LOCK TABLES `orderLine` WRITE;
+/*!40000 ALTER TABLE `orderLine` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orderLine` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_line`
+--
+
+DROP TABLE IF EXISTS `order_line`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_line` (
+  `order_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `quantity` int NOT NULL,
+  PRIMARY KEY (`order_id`,`product_id`),
+  KEY `FKpf904tci8garypkvm32cqupye` (`product_id`),
+  CONSTRAINT `FKkfx57nvwbbfh2ygrm3qpkr6cj` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  CONSTRAINT `FKpf904tci8garypkvm32cqupye` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_line`
+--
+
+LOCK TABLES `order_line` WRITE;
+/*!40000 ALTER TABLE `order_line` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_line` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `member_id` int NOT NULL,
+  `order_date` datetime NOT NULL,
+  `shipping_date` datetime DEFAULT NULL,
+  `delivery_date` datetime DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `shipping_fee` int NOT NULL,
+  `coupon_id` int DEFAULT NULL,
+  `total_cost` int NOT NULL,
+  `payment_method` int NOT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `order_status` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`),
+  KEY `coupon_id` (`coupon_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(255) NOT NULL,
+  `price` int NOT NULL,
+  `sold_out` tinyint(1) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `stock` int NOT NULL,
+  `reserved_stock` int DEFAULT NULL,
+  `sales` int NOT NULL,
+  `publish_date` datetime NOT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `category_id` int NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rating`
+--
+
+DROP TABLE IF EXISTS `rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rating` (
+  `rating_id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `member_id` int NOT NULL,
+  `rating_score` int NOT NULL,
+  `rating_comment` varchar(255) DEFAULT NULL,
+  `rating_date` datetime NOT NULL,
+  PRIMARY KEY (`rating_id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  KEY `member_id` (`member_id`),
+  CONSTRAINT `rating_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `rating_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `rating_ibfk_3` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rating`
+--
+
+LOCK TABLES `rating` WRITE;
+/*!40000 ALTER TABLE `rating` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rating` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ratings`
+--
+
+DROP TABLE IF EXISTS `ratings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ratings` (
+  `rating_id` bigint NOT NULL AUTO_INCREMENT,
+  `rating_comment` varchar(255) DEFAULT NULL,
+  `rating_date` datetime(6) NOT NULL,
+  `rating_score` int NOT NULL,
+  `member_id` varchar(255) NOT NULL,
+  `product_id` int NOT NULL,
+  PRIMARY KEY (`rating_id`),
+  KEY `FKpvx3j2rgs4g99r0rti2vf57or` (`product_id`),
+  CONSTRAINT `FKpvx3j2rgs4g99r0rti2vf57or` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ratings`
+--
+
+LOCK TABLES `ratings` WRITE;
+/*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-12-28 12:11:35

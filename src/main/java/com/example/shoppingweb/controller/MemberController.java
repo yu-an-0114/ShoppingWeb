@@ -30,11 +30,16 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Map<String, String> loginData) {
         try {
+            System.out.println("Login Data: " + loginData);
             String email = loginData.get("email");
             String password = loginData.get("password");
+            if (email == null || password == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email and password are required.");
+            }
+
             Member member = memberService.login(email, password);
             if (member == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid account or password.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid account or password123.");
             }
             return ResponseEntity.ok(member);
 
@@ -70,5 +75,4 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
-
 }
